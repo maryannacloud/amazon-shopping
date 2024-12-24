@@ -33,7 +33,8 @@ public class DriverUtils {
 
         if (driver != null) {
             driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
+            driver.manage().timeouts()
+                    .implicitlyWait(Duration.ofSeconds(60));
         }
     }
 
@@ -103,12 +104,14 @@ public class DriverUtils {
 
     public static WebDriver getDriver() {
         if (driver == null) {
-            throw new RuntimeException("Driver is not initialized. Call createDriver() first.");
+            throw new RuntimeException("Driver is not initialized. " +
+                    "Call createDriver() first.");
         }
         try {
             driver.getCurrentUrl(); // Verify the session is active
         } catch (Exception e) {
-            throw new RuntimeException("Driver session is no longer active. Reinitialize the driver.");
+            throw new RuntimeException("Driver session is no longer active. " +
+                    "Reinitialize the driver.");
         }
         return driver;
     }

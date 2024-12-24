@@ -9,7 +9,8 @@ public class PropertyReader {
 
     public static void initProperty(){
         try {
-            FileReader fileReader = new FileReader("src/test/resources/configs/config.properties");
+            FileReader fileReader = new FileReader(
+                    "src/test/resources/configs/config.properties");
             property.load(fileReader);
         } catch (Exception e) {
             e.printStackTrace();

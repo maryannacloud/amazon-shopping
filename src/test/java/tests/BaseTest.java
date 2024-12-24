@@ -19,7 +19,7 @@ public class BaseTest {
         PropertyReader.initProperty();
         DriverUtils.createDriver(test);
 
-        DriverUtils.getDriver().get(PropertyReader.getProperty("application.url")); // Navigate to URL here
+        DriverUtils.getDriver().get(PropertyReader.getProperty("application.url"));
         homePage = new HomePage();
         searchResultPage = new SearchResultsPage();
     }
@@ -28,7 +28,7 @@ public class BaseTest {
     public void cleanUp() {
         if (DriverUtils.getDriver() != null) {
             DriverUtils.getDriver().quit();
-            DriverUtils.driver = null; // Reset driver to avoid reuse of quit session
+            DriverUtils.driver = null;
         }
     }
 }

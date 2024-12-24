@@ -20,13 +20,16 @@ public class BasePage {
         driver = DriverUtils.getDriver();
         PageFactory.initElements(driver, this);
 
-        int explicitWaitTime = Integer.parseInt(PropertyReader.getProperty("explicit.wait"));
+        int explicitWaitTime = Integer.parseInt(PropertyReader
+                .getProperty("explicit.wait"));
         wait = new WebDriverWait(driver, Duration.ofSeconds(explicitWaitTime));
 
-        int implicitWaitTime = Integer.parseInt(PropertyReader.getProperty("implicit.wait"));
+        int implicitWaitTime = Integer.parseInt(PropertyReader
+                .getProperty("implicit.wait"));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWaitTime));
 
-        int pageLoadTimeout = Integer.parseInt(PropertyReader.getProperty("page.load.timeout"));
+        int pageLoadTimeout = Integer.parseInt(PropertyReader
+                .getProperty("page.load.timeout"));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTimeout));
     }
 
@@ -55,12 +58,21 @@ public class BasePage {
         }
     }
 
+    public void scrollToElement(WebElement element) {
+        try {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].scrollIntoView(true);", element);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void clickElement(WebElement element) {
         try {
             element.click();
         } catch (Exception e) {
             JavascriptExecutor js = (JavascriptExecutor) driver;
-            js.executeScript("arguments[0].click", element);
+            js.executeScript("arguments[0].click()", element);
         }
     }
 

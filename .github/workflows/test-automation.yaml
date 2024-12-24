@@ -1,0 +1,22 @@
+name: Test Automation Pipeline
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - release/*
+      - main
+  push:
+    branches:
+      - develop
+      - release/*
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run Tests
+        run: mvn test
