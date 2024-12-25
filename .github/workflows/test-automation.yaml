@@ -1,12 +1,13 @@
 name: Test Automation Pipeline
 
 on:
-  pull_request:
-    branches:
-      - develop
-      - release/*
-      - main
   push:
+    branches:
+      - feature/*
+      - bugfix/*
+      - hotfix/*
+
+  pull_request:
     branches:
       - develop
       - release/*
@@ -35,8 +36,21 @@ jobs:
       - name: install maven dependencies
         run: mvn install
 
-      - name: run automated regression test suite
-        run: mvn test
+      - name: run feature test
+        if: startsWith(github.ref, 'refs/heads/feature/')
+        run: mvn test -Dtest=FeatureTest
+
+      - name: run sanity test suite
+        if: startsWith(github.ref, 'refs/heads/feature/')
+        run: mvn test -Dtest=FeatureTest
+
+      - name: run smoke test suite
+        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release')
+        run: mvn test -Dtest=SmokeTestSuite
+
+      - name: run regression test suite
+        if: startsWith(github.ref, 'refs/heads/develop') || startsWith(github.ref, 'refs/heads/release')
+        run: mvn test -Dtest=RegressionTestSuite
 
       - name: upload test results
         if: always()
