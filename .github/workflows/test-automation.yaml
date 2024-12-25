@@ -13,10 +13,41 @@ on:
       - main
 
 jobs:
-  tests:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: check out code
         uses: actions/checkout@v3
-      - name: Run Tests
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 23
+
+      - name: cache maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: install maven dependencies
+        run: mvn install
+
+      - name: run automated regression test suite
         run: mvn test
+
+      - name: upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: target/surefire-reports/
+
+      - name: notify slack
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: '{"text":"Test Automation Workflow Completed"}'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
